@@ -48,7 +48,7 @@ const FacebookButton = () => {
         </svg>
         {/* fb emoji */}
         <Box as="span" ml="10px">
-          Sign up with Facebook
+          Log in with Facebook
         </Box>
       </Button>
     </>

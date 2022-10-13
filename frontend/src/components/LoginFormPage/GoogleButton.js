@@ -56,7 +56,7 @@ const GoogleButton = () => {
         </svg>
         {/* fb emoji */}
         <Box as="span" ml="10px">
-          Sign up with Google
+          Log in with Google
         </Box>
       </Button>
     </>

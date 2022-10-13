@@ -84,7 +84,13 @@ const SignupFormPage = () => {
       <div className="topcontainer">
         {/* {submitted && errors.map((err, i) => <div key={i}>{err}</div>)} */}
         {/* <Link to="/">Go back b</Link> */}
-        <SpotifyLogo size={115} />
+        <SpotifyLogo size={155} />
+        <Divider
+          sx={{ position: "absolute", top: "93px" }}
+          mt="-10px"
+          mb="15px"
+        />
+
         <Box as="h2" style={{ marginBottom: "25px" }} className="testt">
           Sign up for free to
           {width < 480 ? <br /> : null} start listening.
@@ -214,7 +220,3 @@ const SignupFormPage = () => {
 };
 
 export default SignupFormPage;
-// const index = () => {
-//   return <div>index</div>;
-// };
-// export default index;

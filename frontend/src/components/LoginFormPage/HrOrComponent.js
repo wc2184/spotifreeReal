@@ -5,7 +5,7 @@ const HrOrComponent = () => {
     <>
       <Box
         as="div"
-        style={{ display: "flex", width: "80%", alignItems: "center" }}
+        style={{ display: "flex", width: "65%", alignItems: "center" }}
       >
         <hr
           style={{ border: "1px solid black", flex: "40%", opacity: "0.1" }}

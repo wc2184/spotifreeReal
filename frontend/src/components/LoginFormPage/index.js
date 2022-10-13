@@ -17,14 +17,14 @@ import GoogleButton from "./GoogleButton";
 import HrOrComponent from "./HrOrComponent";
 import MyInput from "./MyInput";
 import "./SignupFormPage.css";
-import SignUpButton from "./SignUpButton";
+import SignInButton from "./SignInButton";
 import { useWindowSize } from "@react-hook/window-size";
+import DemoSignInButton from "./DemoSignInButton";
+import DontHaveAccButton from "./DontHaveAccButton";
 
 const LoginFormPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [email, setEmail] = useState("");
   const [errors, setErrors] = useState([]);
   const [serverErrors, setServerErrors] = useState([]);
   const [submitted, setSubmitted] = useState(false);
@@ -41,7 +41,7 @@ const LoginFormPage = () => {
       console.log("yoo");
       return;
     }
-    return dispatch(signup({ email, username, password }))
+    return dispatch(login({ credential: username, password: password }))
       .then((res) => res.json())
       .then((data) => {
         console.log(data, "dataaa");
@@ -51,23 +51,16 @@ const LoginFormPage = () => {
   console.log(width, "this is width");
   useEffect(() => {
     let errors = [];
-    if (password !== currentPassword) {
-      errors.push("passwords don't match");
-    }
+
     if (username === "") {
       errors.push("username is blank");
     }
     if (password === "") {
       errors.push("password is blank");
     }
-    if (currentPassword === "") {
-      errors.push("currentPassword is blank");
-    }
-    if (email === "") {
-      errors.push("email is blank");
-    }
+
     setErrors(errors);
-  }, [password, currentPassword, username, currentPassword, email]);
+  }, [password, username]);
 
   return (
     <div
@@ -79,18 +72,36 @@ const LoginFormPage = () => {
         paddingTop: "10px",
       }}
     >
-      <div className="topcontainer">
+      <div className="topcontainersignin">
         {/* {submitted && errors.map((err, i) => <div key={i}>{err}</div>)} */}
         {/* <Link to="/">Go back b</Link> */}
-        <SpotifyLogo size={115} />
-        <Box as="p" style={{ marginBottom: "20px" }} className="testt2">
+        <SpotifyLogo size={155} />
+        <Divider
+          sx={{ position: "absolute", top: "93px" }}
+          mt="-10px"
+          mb="15px"
+        />
+        <Box
+          as="p"
+          style={{
+            marginBottom: "20px",
+            fontSize: "30px",
+            fontWeight: "700",
+            letterSpacing: "-1.2px",
+          }}
+          className="testt2"
+        >
           To continue, {width < 480 ? <br /> : null} log in to Spotify.
         </Box>
         <FacebookButton />
         <GoogleButton />
         <HrOrComponent />
       </div>
-      <Box sx={{ padding: "0 20px 20px 20px" }} maxW="410px">
+      <Box
+        sx={{ padding: "0 20px 20px 20px" }}
+        w={["90vw", "70vw", "50vw", "40vw", "27vw"]}
+        // media query chakra
+      >
         <p
           style={{
             fontFamily: "Circular",
@@ -101,7 +112,7 @@ const LoginFormPage = () => {
             marginBottom: "20px",
           }}
         >
-          Sign up with your email address
+          Log in with your email address
         </p>
         <FormControl
           onSubmit={handleSubmit}
@@ -112,33 +123,19 @@ const LoginFormPage = () => {
             email={username}
             setState={setUsername}
             handleSubmit={handleSubmit}
-            text="Create a username"
+            text="Username"
             errors={errors}
           />
-          <MyInput
-            name="email"
-            email={email}
-            setState={setEmail}
-            handleSubmit={handleSubmit}
-            text="What's your email?"
-            errors={errors}
-          />
+
           <MyInput
             name="password"
             email={password}
             setState={setPassword}
             handleSubmit={handleSubmit}
-            text="Create a password"
+            text="Password"
             errors={errors}
           />
-          <MyInput
-            name="currentPassword"
-            email={currentPassword}
-            setState={setCurrentPassword}
-            handleSubmit={handleSubmit}
-            text="Confirm your password"
-            errors={errors}
-          />
+
           {submitted &&
             serverErrors &&
             serverErrors.map((err, i) => (
@@ -146,9 +143,8 @@ const LoginFormPage = () => {
                 {err}
               </div>
             ))}
-          <br />
 
-          <div
+          {/* <div
             style={{
               display: "flex",
               flexDirection: "column",
@@ -179,11 +175,11 @@ const LoginFormPage = () => {
                 visit my github.
               </ChakraLink>
             </span>
-          </div>
-          <SignUpButton onClick={handleSubmit} />
+          </div> */}
+          <SignInButton onClick={handleSubmit} />
         </FormControl>
-
-        <div
+        <DemoSignInButton />
+        {/* <div
           style={{
             marginTop: "20px",
             textAlign: "center",
@@ -200,14 +196,15 @@ const LoginFormPage = () => {
             Log in
           </ChakraLink>
           .
-        </div>
+        </div> */}
       </Box>
+      <Divider
+        sx={{ border: "2px solid black", marginBottom: "10px" }}
+        w={["86vw", "66vw", "46vw", "36vw", "23vw"]}
+      ></Divider>
+      <DontHaveAccButton />
     </div>
   );
 };
 
 export default LoginFormPage;
-// const index = () => {
-//   return <div>index</div>;
-// };
-// export default index;
