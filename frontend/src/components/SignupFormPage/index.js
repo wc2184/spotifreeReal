@@ -69,7 +69,7 @@ const SignupFormPage = () => {
       errors.push("email is blank");
     }
     setErrors(errors);
-  }, [password, currentPassword, username, currentPassword, email]);
+  }, [password, currentPassword, username, email]);
 
   return (
     <div

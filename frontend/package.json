@@ -14,10 +14,12 @@
     "framer-motion": "^7.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.6.0",
     "react-player": "^2.11.0",
     "react-redux": "^8.0.4",
     "react-router-dom": "^5.3.4",
     "react-scripts": "5.0.1",
+    "react-use-scroll-position": "^2.0.0",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1"
   },
