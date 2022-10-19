@@ -21,24 +21,6 @@ function App() {
         {!currentUser ? <SignupFormPage /> : <Redirect to="/" />}
       </Route>
       <Route path="/">
-        {/* <div>
-          {currentUser && currentUser.username
-            ? `Current user is ${currentUser.username}`
-            : "There is no current user man"}
-        </div>
-        {currentUser ? (
-          <div>
-            <button
-              onClick={() => {
-                dispatch(logout());
-              }}
-            >
-              Log out
-            </button>
-          </div>
-        ) : (
-          <Link to="/signup">Sign up here boi</Link>
-        )} */}
         <Home />
       </Route>
     </Switch>

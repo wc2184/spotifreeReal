@@ -5,3 +5,7 @@
 .navbar {
   position: fixed;
 }
+
+.globalwrapper {
+  background-color: rgb(18, 18, 18);
+}

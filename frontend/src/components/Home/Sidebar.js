@@ -7,7 +7,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = ({ sidebarwidth }) => {
   const location = useLocation();
-  console.log(location.pathname);
+  // console.log(location.pathname);
 
   return (
     <Box className="sidebar">
@@ -51,6 +51,10 @@ const Sidebar = ({ sidebarwidth }) => {
                   location.pathname === "/" ? "white" : "rgb(179, 179, 179)"
                 }
                 fontWeight={500}
+                _hover={{
+                  color: "white",
+                }}
+                sx={{ transition: "0.2s" }}
               >
                 Home
               </Text>
@@ -123,6 +127,10 @@ const Sidebar = ({ sidebarwidth }) => {
                     : "rgb(179, 179, 179)"
                 }
                 fontWeight={500}
+                _hover={{
+                  color: "white",
+                }}
+                sx={{ transition: "0.2s" }}
               >
                 Search
               </Text>
@@ -156,6 +164,10 @@ const Sidebar = ({ sidebarwidth }) => {
                     : "rgb(179, 179, 179)"
                 }
                 fontWeight={500}
+                _hover={{
+                  color: "white",
+                }}
+                sx={{ transition: "0.2s" }}
               >
                 Your Library
               </Text>
