@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import debounce from "lodash/debounce";
 import { Box, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,34 +9,49 @@ const Search = () => {
   const dispatch = useDispatch();
   const searchTerm = useSelector((state) => state.search.search);
   const searchResults = useSelector((state) => state.search.searchResults);
-  //   const updateLive = () => {
-  //     console.log(searchTerm);
-  //     return searchTerm;
-  //   };
-  //   const searchNow = () => {
-  //     console.log("search now");
-  //     // let liveterm = useSelector((state) => state.search.search);
-  //     (() => updateLive())();
-  //     // console.log(liveterm);
-  //     console.log(searchTerm, "buggy searchterm");
-  //   };
-  //   console.log(searchTerm, "searchTerm");
-  //   const debouncedSearch = useMemo(() => {
-  //     return debounce(searchNow, 1000);
-  //   }, []);
+  const ref = useRef();
+  console.log(searchTerm, "thsi is search term");
+  ref.current = searchTerm;
+  console.log(ref, "this is ref");
 
   //   useEffect(() => {
+  //     const searchInterval = setInterval(() => {
+  //       console.log(searchTerm, "search termmy in intervally");
+  //       console.log(ref, "search ref inside ");
+  //     }, 1000);
   //     return () => {
-  //       debouncedSearch.cancel();
+  //       clearInterval(searchInterval);
   //     };
   //   }, [searchTerm]);
+
+  //     const updateLive = () => {
+  //       console.log(searchTerm);
+  //       return searchTerm;
+  //     };
+  //     const searchNowDebounce = () => {
+  //       console.log("search now");
+  //       // let liveterm = useSelector((state) => state.search.search);
+  //       (() => updateLive())();
+  //       // console.log(liveterm);
+  //       console.log(searchTerm, "buggy searchterm");
+  //     };
+  //     console.log(searchTerm, "searchTerm");
+  //     const debouncedSearch = useMemo(() => {
+  //       return debounce(searchNow, 1000);
+  //     }, []);
+
+  //     useEffect(() => {
+  //       return () => {
+  //         debouncedSearch.cancel();
+  //       };
+  //     }, [searchTerm]);
 
   const searchNow = () => {
     console.log(searchTerm, "this is searchTerm");
     dispatch(searchYoutube(searchTerm));
   };
-  console.log(searchTerm, "da search");
-  console.log(searchResults, "da search");
+  //   console.log(searchTerm, "da search");
+  //   console.log(searchResults, "da search");
   return (
     <>
       <InputGroup

@@ -25,7 +25,7 @@ import { ImShuffle } from "react-icons/im";
 import { TbRepeat } from "react-icons/tb";
 import MyTooltip from "./MyTooltip";
 
-const Player = ({ playerTarget, setPlayerTarget }) => {
+const Player = ({ playerTarget, setPlayerTarget, loading, setLoading }) => {
   //   const [currentVideo, setCurrentVideo] = useState("i1nindf1meE");
   //   const [currentVideo, setCurrentVideo] = useState("DK_0jXPuIr0");
   //   const [currentVideo, setCurrentVideo] = useState("DcDbKDAb7go");
@@ -44,7 +44,6 @@ const Player = ({ playerTarget, setPlayerTarget }) => {
   const [maxTime, setMaxTime] = useState(0);
   const [currentStatus, setCurrentStatus] = useState(-1);
   const [videoDetails, setVideoDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   const delaySeek = useCallback(
     debounce((val) => {
@@ -136,6 +135,7 @@ const Player = ({ playerTarget, setPlayerTarget }) => {
           //   console.log(e, "this is e");
           //   console.log("READY TO PLAY");
           setLoading(false);
+          console.log(loading, "this is loadddding in the player");
           setPlayerTarget(e.target);
           setCurrentTime(e.target.getCurrentTime());
           setMaxTime(e.target.getDuration());

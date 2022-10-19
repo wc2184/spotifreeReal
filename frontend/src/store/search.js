@@ -21,7 +21,10 @@ export const setSearchResults = (data) => {
 export const searchYoutube = (text) => async (dispatch) => {
   console.log("fetched once");
   const response = await fetch(
-    `https://www.googleapis.com/youtube/v3/search?key=AIzaSyAJ2XLMnSvimbXpCBpUnoKr4RKZr4VwlGY&q=${text}&type=video&part=snippet&videoCategoryId=10&order=viewCount`,
+    `https://www.googleapis.com/youtube/v3/search?key=AIzaSyAJ2XLMnSvimbXpCBpUnoKr4RKZr4VwlGY&q=${
+      text + " audio"
+    }&type=video&part=snippet&videoCategoryId=10&order=relevance&maxResults=20`,
+    // order=viewCount vs order=relevance
     {
       headers: {
         Accept: "application/json",

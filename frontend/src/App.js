@@ -25,7 +25,7 @@ function App() {
       </Route>
     </Switch>
   );
-  return <div>{routes}</div>;
+  return <div style={{ height: "100%" }}>{routes}</div>;
 }
 
 export default App;
