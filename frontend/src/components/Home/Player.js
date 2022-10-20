@@ -11,7 +11,7 @@ import {
   Text,
   Tooltip,
 } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Youtube from "react-youtube";
 import debounce from "lodash/debounce";
 import "./Player.css";
@@ -33,7 +33,29 @@ const Player = ({ playerTarget, setPlayerTarget, loading, setLoading }) => {
   // changmo
   const dispatch = useDispatch();
   const currentVideo = useSelector((state) => state.player.song);
+
   //   console.log(currentVideo, "this is currVideo");
+  const pressSpaceListener = (e) => {
+    // e.preventDefault();
+    if (e.key == " " && e.target == document.body) {
+      e.preventDefault();
+    }
+    console.log(e.target.nodeName);
+    if (e.key == " " && e.target.nodeName !== "INPUT") {
+      let playbutton = document.querySelector(".triangleplayerbutton");
+      playbutton.click();
+      console.log(playbutton, "da button");
+      //   playerTarget.playVideo();
+      //   playerTarget.pauseVideo();
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("keydown", pressSpaceListener);
+
+    return () => {
+      document.removeEventListener("keydown", pressSpaceListener);
+    };
+  }, []);
 
   useEffect(() => {
     console.log("rerender");
@@ -247,6 +269,7 @@ const Player = ({ playerTarget, setPlayerTarget, loading, setLoading }) => {
                   _hover={{
                     transform: "scale(1.05)",
                   }}
+                  className="triangleplayerbutton"
                 >
                   <Box pl="2px">
                     {loading ? (
@@ -279,6 +302,7 @@ const Player = ({ playerTarget, setPlayerTarget, loading, setLoading }) => {
                   //   transform: "translateY(1px)",
                   transform: "scale(1.05)  translateY(3px)",
                 }}
+                className="triangleplayerbutton"
               >
                 <Box>
                   <IoMdPause size={20} />

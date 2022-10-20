@@ -23,7 +23,7 @@ const Navbar = ({ sidebarwidth, submitted, setSubmitted }) => {
   const currentUser = useSelector((state) => state.session.user);
   const dispatch = useDispatch();
   const history = useHistory();
-  console.log(currentUser);
+  // console.log(currentUser);
 
   // console.log(searchTerm, "this is search term");
   // around 185, transparaent
