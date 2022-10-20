@@ -50,6 +50,7 @@ const Search = ({ submitted, setSubmitted }) => {
     console.log(searchTerm, "this is searchTerm");
     dispatch(searchYoutube(searchTerm)).then(() => {
       setSubmitted(true);
+      window.scrollTo(0, 0);
     });
   };
   //   console.log(searchTerm, "da search");

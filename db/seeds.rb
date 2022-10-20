@@ -22,6 +22,32 @@ ApplicationRecord.transaction do
       email: 'demo@user.io', 
       password: 'password'
     )
+
+    Playlist.create!(
+      title: 'Muh Prayrist', 
+      user_id: 1
+    )
+
+    Song.create!(
+      playlist_id: 1,
+      link: 'AE8y25CcE6s',
+      order: '1'
+    )
+    Song.create!(
+      playlist_id: 1,
+      link: 'VRJiK-kdDb4',
+      order: '2'
+    )
+    Song.create!(
+      playlist_id: 1,
+      link: 'PsO6ZnUZI0g',
+      order: '3'
+    )
+    Song.create!(
+      playlist_id: 1,
+      link: 'Np2IqqJ5otg',
+      order: '3'
+    )
   
     # More users
     # 10.times do 

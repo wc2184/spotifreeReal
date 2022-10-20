@@ -24,6 +24,8 @@ import Player from "./Player";
 import { setCurrentSong } from "../../store/player";
 import { BsPlayFill } from "react-icons/bs";
 
+// plan, use useEffect to update a array with all searchResults from useselector
+
 const Home = () => {
   const dispatch = useDispatch();
   let sidebarwidth = 240;
@@ -31,20 +33,47 @@ const Home = () => {
   const searchTerm = useSelector((state) => state.search.search);
   const currentVideo = useSelector((state) => state.player.song);
   const [submitted, setSubmitted] = useState(false);
+  const [submittedNoembed, setSubmittedNoembed] = useState(false);
 
   const searchResults = useSelector(
     (state) => state.search.searchResults.items
   );
   const [playerTarget, setPlayerTarget] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [noembedDatas, setNoembedDatas] = useState([]);
 
+  useEffect(() => {
+    // essentially doing this because youtube's data api v3 is a 10000 quota so if i view like 10 playlists of 20 songs each it's going to be 50 views a day max lol,
+    // noembed is free api hits, and not affiliated with youtube's data api v3 and won't count towards my cap
+    const fetchNoembedData = async () => {
+      let noembedArr = [];
+      for (const ele of searchResults) {
+        //  console.log(ele, "da ele");
+
+        let res = await fetch(
+          `https://noembed.com/embed?url=https://www.youtube.com/watch?v=${ele.id.videoId}`
+        );
+        let data = await res.json();
+
+        noembedArr.push(data);
+      }
+
+      // console.log(noembedArr, "THE GUCCI ARR");
+      setNoembedDatas(noembedArr);
+      setSubmittedNoembed(true);
+    };
+    if (searchResults.length > 0) {
+      fetchNoembedData();
+    }
+  }, [searchResults]);
+  console.log(noembedDatas, "GUCCI STATE ARR");
   console.log(searchResults, "search resultss");
   return (
     <div className="globalwrapper" style={{ maxWidth: "100vw" }}>
       <Navbar
         sidebarwidth={sidebarwidth}
-        submitted={submitted}
-        setSubmitted={setSubmitted}
+        submitted={submittedNoembed}
+        setSubmitted={setSubmittedNoembed}
       />
       <Sidebar sidebarwidth={sidebarwidth} />
       <Player
@@ -86,9 +115,9 @@ const Home = () => {
               color: "white",
             }}
           >
-            {/* idea, put first 4 on the right side, then slice(5) */}
+            {/* idea, put first 4 on the right side, then slice(5) . */}
             <Box mb={5}>{/* Searching for "{searchTerm}" */}</Box>
-            {!submitted ? null : (
+            {!submittedNoembed ? null : (
               <Box
                 className="topResultAndSongsFlexContainer"
                 style={{
@@ -130,13 +159,16 @@ const Home = () => {
                         // border: "1px solid white",
                         borderRadius: "8px",
                         padding: "20px",
-                        backgroundColor: "rgb(24, 24, 24)",
+                        backgroundColor: "rgb(36, 36, 36)",
                         // transition: "all .9 ease",
                         WebkitTransition: "background-color .3s ease", // transition doesn't work for some reason, this is borrowed from spotify
+                        transition: "ease 0.3s",
                       }}
                       _hover={{
-                        backgroundColor: "rgb(40, 40, 40)",
+                        backgroundColor: "rgb(53, 53, 53)",
                         cursor: "pointer",
+                        transform: "scale(1.02)",
+                        transition: "ease 0.3s",
                       }}
                       _active={{
                         transform: "scale(0.99)",
@@ -160,8 +192,9 @@ const Home = () => {
                               setPlayerTarget((playerTarget) => {
                                 console.log("finally playing vid");
                                 setTimeout(() => {
+                                  console.log("plays video in first");
                                   playerTarget.playVideo();
-                                }, 200);
+                                }, 400);
                                 return playerTarget;
                               });
                               clearInterval(playVideoCheck);
@@ -180,9 +213,13 @@ const Home = () => {
                         borderRadius={10}
                         boxShadow="0 8px 24px rgb(0, 0, 0, .5)" // goat box shadow
                         src={
-                          searchResults.length > 0 &&
-                          searchResults[0].snippet.thumbnails.default.url
+                          noembedDatas.length > 0 &&
+                          noembedDatas[0].thumbnail_url
                         }
+                        // src={
+                        //   searchResults.length > 0 &&
+                        //   searchResults[0].snippet.thumbnails.default.url
+                        // }
                       ></Image>
                       {/* {searchResults.length > 0 && searchResults[0].snippet.title} */}
                       <Box>
@@ -200,14 +237,26 @@ const Home = () => {
                           }}
                           dangerouslySetInnerHTML={{
                             __html:
-                              searchResults.length > 0 &&
-                              searchResults[0].snippet.title.replace(
-                                searchResults[0].snippet.channelTitle
+                              noembedDatas.length > 0 &&
+                              noembedDatas[0].title.replace(
+                                noembedDatas[0].author_name
                                   .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
                                   .replace("VEVO", "") + "- ",
                                 ""
-                              ),
+                              ) + "noembed",
                           }}
+                          // old stuff
+                          //
+                          // dangerouslySetInnerHTML={{
+                          //   __html:
+                          //     searchResults.length > 0 &&
+                          //     searchResults[0].snippet.title.replace(
+                          //       searchResults[0].snippet.channelTitle
+                          //         .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+                          //         .replace("VEVO", "") + "- ",
+                          //       ""
+                          //     ),
+                          // }}
                         ></Box>
 
                         <Box
@@ -223,10 +272,14 @@ const Home = () => {
                             fontSize={15}
                             color="rgb(179, 179, 179)"
                           >
-                            {searchResults.length > 0 &&
-                              searchResults[0].snippet.channelTitle
+                            {noembedDatas.length > 0 &&
+                              noembedDatas[0].author_name
                                 .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
                                 .replace("VEVO", "")}
+                            {/* {searchResults.length > 0 &&
+                              searchResults[0].snippet.channelTitle
+                                .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+                                .replace("VEVO", "")} */}
                           </Box>
                           <Box
                             sx={{
@@ -284,13 +337,18 @@ const Home = () => {
                       Songs
                     </Text>
                     <Box>
-                      {searchResults.slice(1, 5).map((ele) => {
+                      {noembedDatas.slice(1, 5).map((ele) => {
+                        {
+                          // console.log(ele, "this is ele");
+                        }
                         return (
                           <Box
                             _hover={{
                               // pointer: "cursor",
                               cursor: "pointer",
                               backgroundColor: "rgb(42, 42, 42)",
+                              transform: "translate(2px)",
+                              transition: "ease 0.2s",
                             }}
                             _active={{
                               transform: "scale(0.99)",
@@ -302,11 +360,26 @@ const Home = () => {
                               // border: "1px solid white",
                               zIndex: 5,
                               display: "flex",
+                              transition: "ease 0.2s",
                             }}
                             onClick={() => {
                               console.log(loading, "this his loading before");
-                              dispatch(setCurrentSong(ele.id.videoId));
-                              if (currentVideo === ele.id.videoId) {
+
+                              dispatch(
+                                setCurrentSong(
+                                  ele.url.replace(
+                                    "https://www.youtube.com/watch?v=",
+                                    ""
+                                  )
+                                )
+                              );
+                              if (
+                                currentVideo ===
+                                ele.url.replace(
+                                  "https://www.youtube.com/watch?v=",
+                                  ""
+                                )
+                              ) {
                                 playerTarget.seekTo(0);
                                 return;
                               }
@@ -319,8 +392,9 @@ const Home = () => {
                                     setPlayerTarget((playerTarget) => {
                                       console.log("finally playing vid");
                                       setTimeout(() => {
+                                        console.log("plays video in second");
                                         playerTarget.playVideo();
-                                      }, 200);
+                                      }, 400);
                                       return playerTarget;
                                     });
                                     clearInterval(playVideoCheck);
@@ -339,10 +413,11 @@ const Home = () => {
                               mb={5}
                               mr="14px"
                               boxShadow="0 8px 24px rgb(0, 0, 0, .5)" // goat box shadow
-                              src={
-                                searchResults.length > 0 &&
-                                ele.snippet.thumbnails.default.url
-                              }
+                              src={noembedDatas.length > 0 && ele.thumbnail_url}
+                              // src={
+                              //   searchResults.length > 0 &&
+                              //   ele.snippet.thumbnails.default.url
+                              // }
                             ></Image>
                             <Box>
                               <Box
@@ -354,20 +429,30 @@ const Home = () => {
                                 }}
                                 dangerouslySetInnerHTML={{
                                   __html:
-                                    searchResults.length > 0 &&
-                                    ele.snippet.title.replace(
-                                      ele.snippet.channelTitle
+                                    noembedDatas.length > 0 &&
+                                    ele.title.replace(
+                                      ele.author_name
                                         .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
                                         .replace("VEVO", "") + "- ",
                                       ""
-                                    ),
+                                    ) + "noembed",
                                 }}
+                                // dangerouslySetInnerHTML={{
+                                //   __html:
+                                //     searchResults.length > 0 &&
+                                //     ele.snippet.title.replace(
+                                //       ele.snippet.channelTitle
+                                //         .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+                                //         .replace("VEVO", "") + "- ",
+                                //       ""
+                                //     ),
+                                // }}
                               ></Box>
                               <Box
                                 dangerouslySetInnerHTML={{
                                   __html:
-                                    searchResults.length > 0 &&
-                                    ele.snippet.channelTitle
+                                    noembedDatas.length > 0 &&
+                                    ele.author_name
                                       .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
                                       .replace("VEVO", ""),
                                 }}
@@ -380,7 +465,7 @@ const Home = () => {
                   </Box>
                 </Box>
 
-                <Box mt={3} ml={3}>
+                <Box mt={3} ml={3} mb="200px">
                   {/* {searchResults.slice(5).map((ele) => {
                   return (
                     <Box
@@ -425,16 +510,19 @@ const Home = () => {
                     ></Box>
                   );
                 })} */}
-                  {searchResults.slice(5).map((ele) => {
+                  {noembedDatas.slice(5).map((ele) => {
                     return (
                       <Box
                         _hover={{
                           // pointer: "cursor",
                           cursor: "pointer",
                           backgroundColor: "rgb(42, 42, 42)",
+                          transform: "translate(2px)",
+
+                          transition: "ease 0.2s",
                         }}
                         _active={{
-                          transform: "scale(0.99)",
+                          transform: "scale(0.99) translate(-2px)",
                         }}
                         sx={{
                           height: "60px",
@@ -443,14 +531,33 @@ const Home = () => {
                           // border: "1px solid white",
                           zIndex: 5,
                           display: "flex",
+                          transition: "ease 0.2s",
                         }}
                         onClick={() => {
                           console.log(loading, "this his loading before");
-                          dispatch(setCurrentSong(ele.id.videoId));
-                          if (currentVideo === ele.id.videoId) {
+                          dispatch(
+                            setCurrentSong(
+                              ele.url.replace(
+                                "https://www.youtube.com/watch?v=",
+                                ""
+                              )
+                            )
+                          );
+                          // dispatch(setCurrentSong(ele.id.videoId));
+                          if (
+                            currentVideo ===
+                            ele.url.replace(
+                              "https://www.youtube.com/watch?v=",
+                              ""
+                            )
+                          ) {
                             playerTarget.seekTo(0);
                             return;
                           }
+                          // if (currentVideo === ele.id.videoId) {
+                          //   playerTarget.seekTo(0);
+                          //   return;
+                          // }
                           const playVideoCheck = setInterval(() => {
                             // because setInterval and setTimeout has closure effects, there's literally no way to get the latest state without using the implicitly passed argument trick in the setState to retrieve the latest value and then just return the original state - william
                             console.log("should play vid");
@@ -460,8 +567,9 @@ const Home = () => {
                                 setPlayerTarget((playerTarget) => {
                                   console.log("finally playing vid");
                                   setTimeout(() => {
+                                    console.log("plays vid in 3rd THIRD");
                                     playerTarget.playVideo();
-                                  }, 200);
+                                  }, 400);
                                   return playerTarget;
                                 });
                                 clearInterval(playVideoCheck);
@@ -480,10 +588,11 @@ const Home = () => {
                           mb={5}
                           mr="14px"
                           boxShadow="0 8px 24px rgb(0, 0, 0, .5)" // goat box shadow
-                          src={
-                            searchResults.length > 0 &&
-                            ele.snippet.thumbnails.default.url
-                          }
+                          src={noembedDatas.length > 0 && ele.thumbnail_url}
+                          // src={
+                          //   searchResults.length > 0 &&
+                          //   ele.snippet.thumbnails.default.url
+                          // }
                         ></Image>
                         <Box>
                           <Box
@@ -495,23 +604,40 @@ const Home = () => {
                             }}
                             dangerouslySetInnerHTML={{
                               __html:
-                                searchResults.length > 0 &&
-                                ele.snippet.title.replace(
-                                  ele.snippet.channelTitle
+                                noembedDatas.length > 0 &&
+                                ele.title.replace(
+                                  ele.author_name
                                     .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
                                     .replace("VEVO", "") + "- ",
                                   ""
-                                ),
+                                ) + "noembed",
                             }}
+                            // dangerouslySetInnerHTML={{
+                            //   __html:
+                            //     searchResults.length > 0 &&
+                            //     ele.snippet.title.replace(
+                            //       ele.snippet.channelTitle
+                            //         .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+                            //         .replace("VEVO", "") + "- ",
+                            //       ""
+                            //     ),
+                            // }}
                           ></Box>
                           <Box
                             dangerouslySetInnerHTML={{
                               __html:
-                                searchResults.length > 0 &&
-                                ele.snippet.channelTitle
+                                noembedDatas.length > 0 &&
+                                ele.author_name
                                   .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
                                   .replace("VEVO", ""),
                             }}
+                            // dangerouslySetInnerHTML={{
+                            //   __html:
+                            //     searchResults.length > 0 &&
+                            //     ele.snippet.channelTitle
+                            //       .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+                            //       .replace("VEVO", ""),
+                            // }}
                           ></Box>
                         </Box>
                       </Box>

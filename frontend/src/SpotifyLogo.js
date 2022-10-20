@@ -12,7 +12,7 @@ const SpotifyLogo = ({ size, color = "black", style }) => {
         // viewBox="0 0 910.000000 274.000000"
         width={size + 60}
         height="76.000000pt"
-        viewBox="10 -80 867.000000 551.000000"
+        viewBox="10 -90 867.000000 551.000000"
         preserveAspectRatio="xMidYMid meet"
       >
         <metadata>
