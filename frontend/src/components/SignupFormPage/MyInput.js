@@ -47,7 +47,11 @@ const MyInput = ({ name, state, setState, text, handleSubmit, errors }) => {
           marginTop: "4px",
           //   marginBottom: "20px",
         }}
-        type="text"
+        type={
+          name === "password" || name === "currentPassword"
+            ? "password"
+            : "text"
+        }
         id={name}
         value={state}
         onChange={(e) => setState(e.target.value)}

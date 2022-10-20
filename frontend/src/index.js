@@ -9,7 +9,7 @@ import configureStore from "./store";
 import csrfFetch from "./store/csrf";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
 const store = configureStore();
 
@@ -19,12 +19,29 @@ if (process.env.NODE_ENV !== "production") {
   // window.sessionActions = sessionActions;
 }
 
+const theme = extendTheme({
+  components: {
+    Tooltip: {
+      // baseStyle: {
+      //   width: "1000px",
+      // },
+      variants: {
+        //chakra theme
+        arrowStyle: {
+          width: "1000px",
+          backgroundColor: "green",
+        },
+      },
+    },
+  },
+});
+
 function Root() {
   return (
     <BrowserRouter>
       <Provider store={store}>
         {/* <Navigation></Navigation> */}
-        <ChakraProvider>
+        <ChakraProvider theme={theme}>
           <App />
         </ChakraProvider>
       </Provider>

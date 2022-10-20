@@ -7,7 +7,7 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useScrollYPosition } from "react-use-scroll-position";
 
 import { AiOutlineLeft } from "react-icons/ai";
@@ -22,6 +22,7 @@ const Navbar = ({ sidebarwidth, submitted, setSubmitted }) => {
   const y = useScrollYPosition();
   const currentUser = useSelector((state) => state.session.user);
   const dispatch = useDispatch();
+  const history = useHistory();
   console.log(currentUser);
 
   // console.log(searchTerm, "this is search term");
@@ -102,7 +103,7 @@ const Navbar = ({ sidebarwidth, submitted, setSubmitted }) => {
           sx={{
             minWidth: "300px",
             maxWidth: "300px",
-            backgroundColor: "green",
+            // backgroundColor: "green",
             zIndex: "10",
             display: "flex",
             justifyContent: "flex-end",
@@ -115,10 +116,10 @@ const Navbar = ({ sidebarwidth, submitted, setSubmitted }) => {
             sx={{
               width: "245px",
               height: "35px",
-              backgroundColor: "red",
-              marginRight: "50px",
+              // backgroundColor: "red",
+              marginRight: "75px",
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "flex-end",
               alignItems: "center",
             }}
           >
@@ -131,8 +132,13 @@ const Navbar = ({ sidebarwidth, submitted, setSubmitted }) => {
                 borderRadius={30}
                 height="30px"
                 color="white"
+                onClick={() => {
+                  if (!currentUser) {
+                    history.push("/login");
+                  }
+                }}
               >
-                {currentUser && currentUser.username}
+                {currentUser ? currentUser.username : "Sign In"}
               </MenuButton>
               <MenuList
                 borderColor="rgb(40,40, 40)"
@@ -154,7 +160,9 @@ const Navbar = ({ sidebarwidth, submitted, setSubmitted }) => {
                   fontSize={16}
                   color="white"
                   onClick={() => {
-                    dispatch(logout());
+                    dispatch(logout()).then(() => {
+                      history.push("/login");
+                    });
                   }}
                 >
                   Log Out

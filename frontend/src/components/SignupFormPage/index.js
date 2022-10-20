@@ -152,7 +152,7 @@ const SignupFormPage = () => {
           {submitted &&
             serverErrors &&
             serverErrors.map((err, i) => (
-              <div style={{ color: "red" }} key={i}>
+              <div style={{ color: "red", marginBottom: "10px" }} key={i}>
                 <WarningIcon
                   style={{ marginBottom: "3px", marginRight: "1px" }}
                 />{" "}

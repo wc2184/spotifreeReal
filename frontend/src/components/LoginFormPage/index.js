@@ -140,7 +140,7 @@ const LoginFormPage = () => {
           {submitted &&
             serverErrors &&
             serverErrors.map((err, i) => (
-              <div style={{ color: "red" }} key={i}>
+              <div style={{ color: "red", marginBottom: "10px" }} key={i}>
                 {err}
               </div>
             ))}
