@@ -43,6 +43,7 @@ const Home = () => {
   const [noembedDatas, setNoembedDatas] = useState([]);
 
   useEffect(() => {
+    // OPTIMIZED playlist single code
     // essentially doing this because youtube's data api v3 is a 10000 quota so if i view like 10 playlists of 20 songs each it's going to be 50 views a day max lol,
     // noembed is free api hits, and not affiliated with youtube's data api v3 and won't count towards my cap
     const fetchNoembedData = async () => {
@@ -243,7 +244,8 @@ const Home = () => {
                                   .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
                                   .replace("VEVO", "") + "- ",
                                 ""
-                              ) + "noembed",
+                              ),
+                            //  + "noembed",
                           }}
                           // old stuff
                           //
@@ -435,7 +437,8 @@ const Home = () => {
                                         .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
                                         .replace("VEVO", "") + "- ",
                                       ""
-                                    ) + "noembed",
+                                    ),
+                                  // + "noembed",
                                 }}
                                 // dangerouslySetInnerHTML={{
                                 //   __html:
@@ -610,7 +613,8 @@ const Home = () => {
                                     .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
                                     .replace("VEVO", "") + "- ",
                                   ""
-                                ) + "noembed",
+                                ),
+                              // + "noembed",
                             }}
                             // dangerouslySetInnerHTML={{
                             //   __html:
