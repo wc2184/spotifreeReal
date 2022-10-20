@@ -30,6 +30,7 @@ const Home = () => {
   const user = useSelector((state) => state.session.user);
   const searchTerm = useSelector((state) => state.search.search);
   const currentVideo = useSelector((state) => state.player.song);
+  const [submitted, setSubmitted] = useState(false);
 
   const searchResults = useSelector(
     (state) => state.search.searchResults.items
@@ -40,7 +41,11 @@ const Home = () => {
   console.log(searchResults, "search resultss");
   return (
     <div className="globalwrapper" style={{ maxWidth: "100vw" }}>
-      <Navbar sidebarwidth={sidebarwidth} />
+      <Navbar
+        sidebarwidth={sidebarwidth}
+        submitted={submitted}
+        setSubmitted={setSubmitted}
+      />
       <Sidebar sidebarwidth={sidebarwidth} />
       <Player
         playerTarget={playerTarget}
@@ -83,7 +88,7 @@ const Home = () => {
           >
             {/* idea, put first 4 on the right side, then slice(5) */}
             <Box mb={5}>{/* Searching for "{searchTerm}" */}</Box>
-            {searchTerm === "" ? null : (
+            {!submitted ? null : (
               <Box
                 className="topResultAndSongsFlexContainer"
                 style={{

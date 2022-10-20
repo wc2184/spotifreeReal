@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { searchYoutube, setSearch } from "../../store/search";
 import { FiSearch } from "react-icons/fi";
 
-const Search = () => {
+const Search = ({ submitted, setSubmitted }) => {
   const dispatch = useDispatch();
   const searchTerm = useSelector((state) => state.search.search);
   const searchResults = useSelector((state) => state.search.searchResults);
@@ -48,7 +48,9 @@ const Search = () => {
 
   const searchNow = () => {
     console.log(searchTerm, "this is searchTerm");
-    dispatch(searchYoutube(searchTerm));
+    dispatch(searchYoutube(searchTerm)).then(() => {
+      setSubmitted(true);
+    });
   };
   //   console.log(searchTerm, "da search");
   //   console.log(searchResults, "da search");

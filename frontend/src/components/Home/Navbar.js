@@ -18,7 +18,7 @@ import Search from "./Search";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/session";
 
-const Navbar = ({ sidebarwidth }) => {
+const Navbar = ({ sidebarwidth, submitted, setSubmitted }) => {
   const y = useScrollYPosition();
   const currentUser = useSelector((state) => state.session.user);
   const dispatch = useDispatch();
@@ -90,7 +90,9 @@ const Navbar = ({ sidebarwidth }) => {
             />
           </Box>
         </Flex>
-        {location.pathname === "/search" ? <Search /> : null}
+        {location.pathname === "/search" ? (
+          <Search submitted={submitted} setSubmitted={setSubmitted} />
+        ) : null}
         {/* <div style={{ color: "yellow", width: "200px" }}>Hello</div>
         <div style={{ color: "yellow", width: "200px" }}>Hello</div>
         <div style={{ color: "yellow", width: "200px" }}>Hello</div>
