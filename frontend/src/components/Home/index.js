@@ -138,8 +138,12 @@ const Home = () => {
                         backgroundColor: "rgb(40, 40, 40)",
                         cursor: "pointer",
                       }}
+                      _active={{
+                        transform: "scale(0.99)",
+                      }}
                       onClick={() => {
                         console.log(loading, "this his loading before");
+
                         dispatch(setCurrentSong(searchResults[0].id.videoId));
                         //BOOKMARK playerTarget.seekTo(val)
                         if (currentVideo === searchResults[0].id.videoId) {
@@ -288,6 +292,9 @@ const Home = () => {
                               cursor: "pointer",
                               backgroundColor: "rgb(42, 42, 42)",
                             }}
+                            _active={{
+                              transform: "scale(0.99)",
+                            }}
                             sx={{
                               height: "60px",
                               borderRadius: "4px",
@@ -373,7 +380,7 @@ const Home = () => {
                   </Box>
                 </Box>
 
-                <Box mt={3}>
+                <Box mt={3} ml={3}>
                   {/* {searchResults.slice(5).map((ele) => {
                   return (
                     <Box
@@ -425,6 +432,9 @@ const Home = () => {
                           // pointer: "cursor",
                           cursor: "pointer",
                           backgroundColor: "rgb(42, 42, 42)",
+                        }}
+                        _active={{
+                          transform: "scale(0.99)",
                         }}
                         sx={{
                           height: "60px",

@@ -130,12 +130,20 @@ const Navbar = ({ sidebarwidth, submitted, setSubmitted }) => {
                 as={Button}
                 backgroundColor="rgb(40,40,40)"
                 borderRadius={30}
-                height="30px"
+                height="34px"
                 color="white"
                 onClick={() => {
                   if (!currentUser) {
                     history.push("/login");
                   }
+                }}
+                _active={{
+                  backgroundColor: "none",
+                  transform: "scale(0.96)",
+                }}
+                _hover={{
+                  backgroundColor: "none",
+                  transform: "scale(1.03)",
                 }}
               >
                 {currentUser ? currentUser.username : "Sign In"}
