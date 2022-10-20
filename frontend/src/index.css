@@ -6,7 +6,7 @@ html,
   /* for some reason removing this makes it actually expand all */
   width: 100%;
   overflow-y: scroll;
-  background-color: rgb(18, 18, 18);
+  /* background-color: rgb(18, 18, 18); */
 }
 * {
   font-family: Circular;

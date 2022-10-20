@@ -1,14 +1,28 @@
-import { Box, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+} from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import { useScrollYPosition } from "react-use-scroll-position";
 
 import { AiOutlineLeft } from "react-icons/ai";
 import { AiOutlineRight } from "react-icons/ai";
+import { FaUserAlt } from "react-icons/fa";
 import { useEffect, useMemo } from "react";
 import Search from "./Search";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../store/session";
 
 const Navbar = ({ sidebarwidth }) => {
   const y = useScrollYPosition();
+  const currentUser = useSelector((state) => state.session.user);
+  const dispatch = useDispatch();
+  console.log(currentUser);
 
   // console.log(searchTerm, "this is search term");
   // around 185, transparaent
@@ -88,10 +102,65 @@ const Navbar = ({ sidebarwidth }) => {
             maxWidth: "300px",
             backgroundColor: "green",
             zIndex: "10",
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
           }}
           ml="auto"
         >
-          User placeholder
+          {/* User placeholder */}
+          <Box
+            sx={{
+              width: "245px",
+              height: "35px",
+              backgroundColor: "red",
+              marginRight: "50px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {/* profile menu */}
+            <Menu autoSelect={false}>
+              <MenuButton
+                leftIcon={<FaUserAlt color="white" />}
+                as={Button}
+                backgroundColor="rgb(40,40,40)"
+                borderRadius={30}
+                height="30px"
+                color="white"
+              >
+                {currentUser && currentUser.username}
+              </MenuButton>
+              <MenuList
+                borderColor="rgb(40,40, 40)"
+                backgroundColor="rgb(40,40, 40)"
+              >
+                <MenuItem
+                  _hover={{
+                    backgroundColor: "gray",
+                  }}
+                  fontSize={16}
+                  color="white"
+                >
+                  Profile
+                </MenuItem>
+                <MenuItem
+                  _hover={{
+                    backgroundColor: "gray",
+                  }}
+                  fontSize={16}
+                  color="white"
+                  onClick={() => {
+                    dispatch(logout());
+                  }}
+                >
+                  Log Out
+                </MenuItem>
+                {/* <MenuItem></MenuItem> */}
+              </MenuList>
+            </Menu>
+          </Box>
         </Box>
       </div>
     </Box>

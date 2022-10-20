@@ -79,6 +79,7 @@ const SignupFormPage = () => {
         justifyContent: "center",
         alignItems: "center",
         paddingTop: "10px",
+        backgroundColor: "white",
       }}
     >
       <div className="topcontainer">
