@@ -35,7 +35,7 @@ const Home = () => {
   const [submitted, setSubmitted] = useState(false);
   const [submittedNoembed, setSubmittedNoembed] = useState(false);
   const playlists = useSelector((state) => state.playlist.list);
-
+  const currentUser = useSelector((state) => state.session.user);
   const searchResults = useSelector(
     (state) => state.search.searchResults.items
   );
@@ -92,9 +92,446 @@ const Home = () => {
 
       <Route exact path="/">
         <MainContentWrapper sidebarwidth={sidebarwidth}>
-          {user && user.username + "is the current user! "} <br />
-          <Lorem />
-          <div>
+          <Box
+            mt="100px"
+            width={`calc(100vw - ${sidebarwidth}px)`}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              // justifyContent: "flex-start",
+              // height: "1000px",
+              flexDir: "column",
+            }}
+            ml="30px"
+          >
+            <Box>
+              <Text
+                sx={{ flex: "1 0 15%" }}
+                color="white"
+                fontWeight="700"
+                fontSize="28px"
+                mb={4}
+                letterSpacing="-1px"
+              >
+                Welcome back
+              </Text>
+              <Box
+                mt={5}
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignContent: "flex-start",
+                  maxWidth: "100%",
+                  height: "100%",
+                  flexWrap: "wrap",
+                  gap: "20px 20px",
+                }}
+              >
+                {playlists
+                  .reverse()
+                  .slice(0, 6)
+                  .map((el, i) => {
+                    // return <div>{el.title}</div>;
+                    return (
+                      <Box
+                        style={
+                          {
+                            // display: "flex",
+                            // flex: "1 0 30%",
+                            // height: "260px",
+                          }
+                        }
+                      >
+                        <Box
+                          sx={{
+                            flex: "1 0 40%",
+                            display: "flex",
+                            width: "400px",
+                            padding: "20px",
+                            // border: "1px solid white",
+                            borderRadius: "8px",
+                            // padding: "20px",
+                            backgroundColor: "rgb(32, 32, 32)",
+                            // transition: "all .9 ease",
+                            WebkitTransition: "background-color .3s ease", // transition doesn't work for some reason, this is borrowed from spotify
+                            transition: "ease 0.3s",
+                          }}
+                          _hover={{
+                            backgroundColor: "rgb(53, 53, 53)",
+                            cursor: "pointer",
+                            transform: "scale(1.02)",
+                            transition: "ease 0.3s",
+                          }}
+                          _active={{
+                            transform: "scale(0.99)",
+                          }}
+                          onClick={() => {
+                            console.log(loading, "this his loading before");
+
+                            dispatch(
+                              setCurrentSong(searchResults[i].id.videoId)
+                            );
+                            //BOOKMARK playerTarget.seekTo(val)
+                            if (currentVideo === searchResults[0].id.videoId) {
+                              playerTarget.seekTo(0);
+                              return;
+                            }
+
+                            const playVideoCheck = setInterval(() => {
+                              // because setInterval and setTimeout has closure effects, there's literally no way to get the latest state without using the implicitly passed argument trick in the setState to retrieve the latest value and then just return the original state - william
+                              console.log("should play vid");
+                              setLoading((loading) => {
+                                console.log(loading, "this is loading");
+                                if (!loading) {
+                                  setPlayerTarget((playerTarget) => {
+                                    console.log("finally playing vid");
+                                    setTimeout(() => {
+                                      console.log("plays video in first");
+                                      playerTarget.playVideo();
+                                    }, 400);
+                                    return playerTarget;
+                                  });
+                                  clearInterval(playVideoCheck);
+                                }
+                                return loading;
+                              });
+
+                              // playerTarget.playVideo();
+                            }, 300);
+                          }}
+                        >
+                          <Image
+                            w="120px"
+                            h="100px"
+                            // mb={5}
+                            mr={5}
+                            // borderRadius={10}
+                            boxShadow="0 8px 24px rgb(0, 0, 0, .5)" // goat box shadow
+                            src={
+                              noembedDatas.length > 0 &&
+                              noembedDatas[
+                                Math.floor(Math.random() * noembedDatas.length)
+                              ].thumbnail_url
+                            }
+                            // src={
+                            //   searchResults.length > 0 &&
+                            //   searchResults[0].snippet.thumbnails.default.url
+                            // }
+                          ></Image>
+                          {/* {searchResults.length > 0 && searchResults[0].snippet.title} */}
+                          <Box>
+                            {/* good parsed title and channel */}
+                            <Box
+                              fontSize="30px"
+                              fontWeight={700}
+                              letterSpacing="-1.5px"
+                              mb={1}
+                              sx={{
+                                textOverflow: "ellipsis", //overflow but just simply
+                                overflow: "hidden",
+                                whiteSpace: "nowrap",
+                                maxHeight: "50px",
+                                color: "white",
+                              }}
+                            >
+                              {el.title}
+                            </Box>
+
+                            <Box
+                              sx={{
+                                display: "flex",
+                                width: "100%",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Box
+                                mt="1px"
+                                ml="1px"
+                                fontSize={15}
+                                color="rgb(179, 179, 179)"
+                              >
+                                {noembedDatas.length > 0 &&
+                                  noembedDatas[
+                                    Math.floor(
+                                      Math.random() * noembedDatas.length
+                                    )
+                                  ].author_name
+                                    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+                                    .replace("VEVO", "")}
+                                {/* {searchResults.length > 0 &&
+                    searchResults[0].snippet.channelTitle
+                      .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+                      .replace("VEVO", "")} */}
+                              </Box>
+                              {/* <Box
+                            sx={{
+                              fontWeight: "700",
+                              fontSize: "13px",
+                              backgroundColor: "rgb(19, 19, 19)",
+                              width: "80px",
+                              borderRadius: "20px",
+                              padding: "3px 3px",
+                              textAlign: "center",
+                              marginLeft: "8px",
+                              marginTop: "2px",
+                            }}
+                            color="white"
+                          >
+                            PLAYLIST
+                          </Box> */}
+                              {/* <Box
+                          sx={{
+                            width: "48px",
+                            height: "48px",
+                            borderRadius: "48px",
+                            backgroundColor: "rgb(30, 215, 96)",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginLeft: "auto",
+                            marginRight: "5px",
+                            boxShadow: "0px 8px 24px rgb(0, 0, 0, .7)",
+                          }}
+                          _hover={{
+                            transform: "scale(1.05)",
+                          }}
+                          _active={{
+                            transform: "scale(.95)",
+                          }}
+                        >
+                          <BsPlayFill
+                            style={{ marginLeft: "2px" }}
+                            color="black"
+                            size={30}
+                          />
+                        </Box> */}
+                            </Box>
+                          </Box>
+                        </Box>
+                      </Box>
+                    );
+                  })}
+              </Box>
+            </Box>
+            <Box
+              height={noembedDatas.length === 0 ? "100vw" : ""}
+              w="80vw"
+              mt="70px"
+              sx={{}}
+              mr="auto"
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  // flexWrap: "wrap",
+                }}
+              >
+                <Text
+                  // sx={{ flex: "1 0 15%" }}
+                  color="white"
+                  fontWeight="700"
+                  fontSize="28px"
+                  mb="20px"
+                  letterSpacing="-1px"
+                >
+                  Recently Played
+                </Text>
+                <Box
+                  w="80vw"
+                  sx={{ display: "flex", gap: "20px", flexWrap: "wrap" }}
+                >
+                  {noembedDatas.slice(0, 12).map((el, i) => {
+                    // return <div>{el.title}</div>;
+                    return (
+                      <Box
+                        style={
+                          {
+                            // display: "flex",
+                            // flex: "1 0 30%",
+                            // height: "260px",
+                          }
+                        }
+                      >
+                        <Box
+                          sx={{
+                            flex: "1 0 40%",
+                            display: "flex",
+                            flexDir: "column",
+                            width: "300px",
+                            padding: "20px",
+                            // border: "1px solid white",
+                            borderRadius: "8px",
+                            // padding: "20px",
+                            backgroundColor: "rgb(32, 32, 32)",
+                            // transition: "all .9 ease",
+                            WebkitTransition: "background-color .3s ease", // transition doesn't work for some reason, this is borrowed from spotify
+                            transition: "ease 0.3s",
+                          }}
+                          _hover={{
+                            backgroundColor: "rgb(53, 53, 53)",
+                            cursor: "pointer",
+                            transform: "scale(1.02)",
+                            transition: "ease 0.3s",
+                          }}
+                          _active={{
+                            transform: "scale(0.99)",
+                          }}
+                          onClick={() => {
+                            console.log(loading, "this his loading before");
+
+                            dispatch(
+                              setCurrentSong(searchResults[i].id.videoId)
+                            );
+                            //BOOKMARK playerTarget.seekTo(val)
+                            if (currentVideo === searchResults[0].id.videoId) {
+                              playerTarget.seekTo(0);
+                              return;
+                            }
+
+                            const playVideoCheck = setInterval(() => {
+                              // because setInterval and setTimeout has closure effects, there's literally no way to get the latest state without using the implicitly passed argument trick in the setState to retrieve the latest value and then just return the original state - william
+                              console.log("should play vid");
+                              setLoading((loading) => {
+                                console.log(loading, "this is loading");
+                                if (!loading) {
+                                  setPlayerTarget((playerTarget) => {
+                                    console.log("finally playing vid");
+                                    setTimeout(() => {
+                                      console.log("plays video in first");
+                                      playerTarget.playVideo();
+                                    }, 400);
+                                    return playerTarget;
+                                  });
+                                  clearInterval(playVideoCheck);
+                                }
+                                return loading;
+                              });
+
+                              // playerTarget.playVideo();
+                            }, 300);
+                          }}
+                        >
+                          <Image
+                            w="120px"
+                            h="100px"
+                            // mb={5}
+                            mr={5}
+                            // borderRadius={10}
+                            boxShadow="0 8px 24px rgb(0, 0, 0, .5)" // goat box shadow
+                            src={el.thumbnail_url}
+                            // src={
+                            //   searchResults.length > 0 &&
+                            //   searchResults[0].snippet.thumbnails.default.url
+                            // }
+                          ></Image>
+                          {/* {searchResults.length > 0 && searchResults[0].snippet.title} */}
+                          <Box>
+                            {/* good parsed title and channel */}
+                            <Box
+                              fontSize="30px"
+                              fontWeight={700}
+                              letterSpacing="-1.5px"
+                              mb={1}
+                              sx={{
+                                textOverflow: "ellipsis", //overflow but just simply
+                                overflow: "hidden",
+                                whiteSpace: "nowrap",
+                                maxHeight: "50px",
+                                color: "white",
+                              }}
+                            >
+                              {noembedDatas.length > 0 &&
+                                el.title.replace(
+                                  el.author_name
+                                    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+                                    .replace("VEVO", "") + "- ",
+                                  ""
+                                )}
+                            </Box>
+
+                            <Box
+                              sx={{
+                                display: "flex",
+                                width: "100%",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Box
+                                mt="1px"
+                                ml="1px"
+                                fontSize={15}
+                                color="rgb(179, 179, 179)"
+                              >
+                                {noembedDatas.length > 0 &&
+                                  noembedDatas[
+                                    Math.floor(
+                                      Math.random() * noembedDatas.length
+                                    )
+                                  ].author_name
+                                    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+                                    .replace("VEVO", "")}
+                                {/* {searchResults.length > 0 &&
+                    searchResults[0].snippet.channelTitle
+                      .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+                      .replace("VEVO", "")} */}
+                              </Box>
+                              {/* <Box
+                            sx={{
+                              fontWeight: "700",
+                              fontSize: "13px",
+                              backgroundColor: "rgb(19, 19, 19)",
+                              width: "80px",
+                              borderRadius: "20px",
+                              padding: "3px 3px",
+                              textAlign: "center",
+                              marginLeft: "8px",
+                              marginTop: "2px",
+                            }}
+                            color="white"
+                          >
+                            PLAYLIST
+                          </Box> */}
+                              {/* <Box
+                          sx={{
+                            width: "48px",
+                            height: "48px",
+                            borderRadius: "48px",
+                            backgroundColor: "rgb(30, 215, 96)",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginLeft: "auto",
+                            marginRight: "5px",
+                            boxShadow: "0px 8px 24px rgb(0, 0, 0, .7)",
+                          }}
+                          _hover={{
+                            transform: "scale(1.05)",
+                          }}
+                          _active={{
+                            transform: "scale(.95)",
+                          }}
+                        >
+                          <BsPlayFill
+                            style={{ marginLeft: "2px" }}
+                            color="black"
+                            size={30}
+                          />
+                        </Box> */}
+                            </Box>
+                          </Box>
+                        </Box>
+                      </Box>
+                    );
+                  })}
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+          {/* {user && user.username + "is the current user! "} <br /> */}
+          {/* <Lorem /> */}
+          {/* <div>
             <Button
               colorScheme="green"
               onClick={() => {
@@ -103,7 +540,7 @@ const Home = () => {
             >
               Log out
             </Button>
-          </div>
+          </div> */}
         </MainContentWrapper>
       </Route>
       <Route exact path="/search">
@@ -149,7 +586,7 @@ const Home = () => {
                       sx={{ flex: "1 0 15%" }}
                       color="white"
                       fontWeight="700"
-                      fontSize="25px"
+                      fontSize="27px"
                       mb={4}
                     >
                       Top result
@@ -333,7 +770,7 @@ const Home = () => {
                       sx={{ flex: "1 0 15%" }}
                       color="white"
                       fontWeight="700"
-                      fontSize="25px"
+                      fontSize="27px"
                       mb={4}
                     >
                       Songs
@@ -693,157 +1130,177 @@ const Home = () => {
       <Route exact path="/library">
         <MainContentWrapper sidebarwidth={sidebarwidth}>
           <Box
-            mt={20}
             sx={{
               display: "flex",
-              justifyContent: "center",
-              maxWidth: "100%",
-              height: "1000px",
-              flexWrap: "wrap",
-              gap: "100px 30px",
+              flexDir: "column",
+              justifyContent: "flex-start",
+              paddingLeft: "10px",
             }}
           >
-            {playlists.map((el, i) => {
-              // return <div>{el.title}</div>;
-              return (
-                <Box
-                  style={{
-                    display: "flex",
-                    // flex: "1 0 30%",
-                    minHeight: "260px",
-                  }}
-                >
+            <Text
+              sx={{ flex: "1 0 15%" }}
+              color="white"
+              fontWeight="700"
+              fontSize="30px"
+              letterSpacing="-1px"
+              mt="80px"
+              ml="10px"
+              mb="30px"
+            >
+              Your Playlists
+            </Text>
+            <Box
+              mt={5}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                maxWidth: "100%",
+                height: "1000px",
+                flexWrap: "wrap",
+                gap: "60px 30px",
+              }}
+            >
+              {playlists.map((el, i) => {
+                // return <div>{el.title}</div>;
+                return (
                   <Box
-                    sx={{
-                      flex: "1 0 85%",
-                      width: "300px",
-                      // border: "1px solid white",
-                      borderRadius: "8px",
-                      padding: "20px",
-                      backgroundColor: "rgb(32, 32, 32)",
-                      // transition: "all .9 ease",
-                      WebkitTransition: "background-color .3s ease", // transition doesn't work for some reason, this is borrowed from spotify
-                      transition: "ease 0.3s",
-                    }}
-                    _hover={{
-                      backgroundColor: "rgb(53, 53, 53)",
-                      cursor: "pointer",
-                      transform: "scale(1.02)",
-                      transition: "ease 0.3s",
-                    }}
-                    _active={{
-                      transform: "scale(0.99)",
-                    }}
-                    onClick={() => {
-                      console.log(loading, "this his loading before");
-
-                      dispatch(setCurrentSong(searchResults[i].id.videoId));
-                      //BOOKMARK playerTarget.seekTo(val)
-                      if (currentVideo === searchResults[0].id.videoId) {
-                        playerTarget.seekTo(0);
-                        return;
-                      }
-
-                      const playVideoCheck = setInterval(() => {
-                        // because setInterval and setTimeout has closure effects, there's literally no way to get the latest state without using the implicitly passed argument trick in the setState to retrieve the latest value and then just return the original state - william
-                        console.log("should play vid");
-                        setLoading((loading) => {
-                          console.log(loading, "this is loading");
-                          if (!loading) {
-                            setPlayerTarget((playerTarget) => {
-                              console.log("finally playing vid");
-                              setTimeout(() => {
-                                console.log("plays video in first");
-                                playerTarget.playVideo();
-                              }, 400);
-                              return playerTarget;
-                            });
-                            clearInterval(playVideoCheck);
-                          }
-                          return loading;
-                        });
-
-                        // playerTarget.playVideo();
-                      }, 300);
+                    style={{
+                      display: "flex",
+                      // flex: "1 0 30%",
+                      minHeight: "260px",
                     }}
                   >
-                    <Image
-                      w="120px"
-                      h="100px"
-                      mb={5}
-                      borderRadius={10}
-                      boxShadow="0 8px 24px rgb(0, 0, 0, .5)" // goat box shadow
-                      src={
-                        noembedDatas.length > 0 &&
-                        noembedDatas[
-                          Math.floor(Math.random() * noembedDatas.length)
-                        ].thumbnail_url
-                      }
-                      // src={
-                      //   searchResults.length > 0 &&
-                      //   searchResults[0].snippet.thumbnails.default.url
-                      // }
-                    ></Image>
-                    {/* {searchResults.length > 0 && searchResults[0].snippet.title} */}
-                    <Box>
-                      {/* good parsed title and channel */}
-                      <Box
-                        fontSize="30px"
-                        fontWeight={700}
-                        letterSpacing="-1.5px"
-                        mb={1}
-                        sx={{
-                          textOverflow: "ellipsis", //overflow but just simply
-                          overflow: "hidden",
-                          whiteSpace: "nowrap",
-                          maxHeight: "50px",
-                          color: "white",
-                        }}
-                      >
-                        {el.title}
-                      </Box>
+                    <Box
+                      sx={{
+                        flex: "1 0 85%",
+                        width: "300px",
+                        // border: "1px solid white",
+                        borderRadius: "8px",
+                        padding: "20px",
+                        backgroundColor: "rgb(32, 32, 32)",
+                        // transition: "all .9 ease",
+                        WebkitTransition: "background-color .3s ease", // transition doesn't work for some reason, this is borrowed from spotify
+                        transition: "ease 0.3s",
+                      }}
+                      _hover={{
+                        backgroundColor: "rgb(53, 53, 53)",
+                        cursor: "pointer",
+                        transform: "scale(1.02)",
+                        transition: "ease 0.3s",
+                      }}
+                      _active={{
+                        transform: "scale(0.99)",
+                      }}
+                      onClick={() => {
+                        console.log(loading, "this his loading before");
 
-                      <Box
-                        sx={{
-                          display: "flex",
-                          width: "100%",
-                          alignItems: "center",
-                        }}
-                      >
+                        dispatch(setCurrentSong(searchResults[i].id.videoId));
+                        //BOOKMARK playerTarget.seekTo(val)
+                        if (currentVideo === searchResults[0].id.videoId) {
+                          playerTarget.seekTo(0);
+                          return;
+                        }
+
+                        const playVideoCheck = setInterval(() => {
+                          // because setInterval and setTimeout has closure effects, there's literally no way to get the latest state without using the implicitly passed argument trick in the setState to retrieve the latest value and then just return the original state - william
+                          console.log("should play vid");
+                          setLoading((loading) => {
+                            console.log(loading, "this is loading");
+                            if (!loading) {
+                              setPlayerTarget((playerTarget) => {
+                                console.log("finally playing vid");
+                                setTimeout(() => {
+                                  console.log("plays video in first");
+                                  playerTarget.playVideo();
+                                }, 400);
+                                return playerTarget;
+                              });
+                              clearInterval(playVideoCheck);
+                            }
+                            return loading;
+                          });
+
+                          // playerTarget.playVideo();
+                        }, 300);
+                      }}
+                    >
+                      <Image
+                        w="120px"
+                        h="100px"
+                        mb={5}
+                        borderRadius={10}
+                        boxShadow="0 8px 24px rgb(0, 0, 0, .5)" // goat box shadow
+                        src={
+                          noembedDatas.length > 0 &&
+                          noembedDatas[
+                            Math.floor(Math.random() * noembedDatas.length)
+                          ].thumbnail_url
+                        }
+                        // src={
+                        //   searchResults.length > 0 &&
+                        //   searchResults[0].snippet.thumbnails.default.url
+                        // }
+                      ></Image>
+                      {/* {searchResults.length > 0 && searchResults[0].snippet.title} */}
+                      <Box>
+                        {/* good parsed title and channel */}
                         <Box
-                          mt="1px"
-                          ml="1px"
-                          fontSize={15}
-                          color="rgb(179, 179, 179)"
+                          fontSize="30px"
+                          fontWeight={700}
+                          letterSpacing="-1.5px"
+                          mb={1}
+                          sx={{
+                            textOverflow: "ellipsis", //overflow but just simply
+                            overflow: "hidden",
+                            whiteSpace: "nowrap",
+                            maxHeight: "50px",
+                            color: "white",
+                          }}
                         >
-                          {noembedDatas.length > 0 &&
-                            noembedDatas[
-                              Math.floor(Math.random() * noembedDatas.length)
-                            ].author_name
-                              .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-                              .replace("VEVO", "")}
-                          {/* {searchResults.length > 0 &&
+                          {el.title}
+                        </Box>
+
+                        <Box
+                          sx={{
+                            display: "flex",
+                            width: "100%",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Box
+                            mt="1px"
+                            ml="1px"
+                            fontSize={15}
+                            color="rgb(179, 179, 179)"
+                          >
+                            {noembedDatas.length > 0 &&
+                              noembedDatas[
+                                Math.floor(Math.random() * noembedDatas.length)
+                              ].author_name
+                                .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+                                .replace("VEVO", "")}
+                            {/* {searchResults.length > 0 &&
                     searchResults[0].snippet.channelTitle
                       .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
                       .replace("VEVO", "")} */}
-                        </Box>
-                        <Box
-                          sx={{
-                            fontWeight: "700",
-                            fontSize: "13px",
-                            backgroundColor: "rgb(19, 19, 19)",
-                            width: "80px",
-                            borderRadius: "20px",
-                            padding: "3px 3px",
-                            textAlign: "center",
-                            marginLeft: "8px",
-                            marginTop: "2px",
-                          }}
-                          color="white"
-                        >
-                          PLAYLIST
-                        </Box>
-                        {/* <Box
+                          </Box>
+                          <Box
+                            sx={{
+                              fontWeight: "700",
+                              fontSize: "13px",
+                              backgroundColor: "rgb(19, 19, 19)",
+                              width: "80px",
+                              borderRadius: "20px",
+                              padding: "3px 3px",
+                              textAlign: "center",
+                              marginLeft: "8px",
+                              marginTop: "2px",
+                            }}
+                            color="white"
+                          >
+                            PLAYLIST
+                          </Box>
+                          {/* <Box
                           sx={{
                             width: "48px",
                             height: "48px",
@@ -869,14 +1326,15 @@ const Home = () => {
                             size={30}
                           />
                         </Box> */}
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
-                </Box>
-              );
-            })}
+                );
+              })}
+            </Box>
+            ;
           </Box>
-          ;
           {/* {user && user.username + "is the current user! "} <br />
           frfdsonny the goat we in the librarywe in the librarywe in the
           librarywe in the librarywe in the librarywe in the librarywe in the

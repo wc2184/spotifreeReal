@@ -34,6 +34,9 @@ function App() {
   const location = useLocation();
   const [width] = useWindowSize();
 
+  useEffect(() => {
+    document.title = "Spotifree 🎵";
+  }, []);
   let routes = (
     <Switch>
       <Route path="/login">
