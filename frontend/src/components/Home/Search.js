@@ -67,6 +67,7 @@ const Search = ({ submitted, setSubmitted }) => {
           children={<Box as={FiSearch} size={24} ml="6px" />}
         />
         <Input
+          className="searchbartarget"
           placeholder="What do you want to listen to?"
           sx={{ width: "350px", borderRadius: "500px" }}
           _focus={{ outline: "none" }}

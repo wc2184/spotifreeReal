@@ -71,6 +71,11 @@ const Sidebar = ({ sidebarwidth }) => {
               pb={3}
               as={Link}
               to="/search"
+              onClick={() => {
+                setTimeout(() => {
+                  document.querySelector(".searchbartarget").focus();
+                }, 200);
+              }}
             >
               {location.pathname === "/search" ? (
                 <>
