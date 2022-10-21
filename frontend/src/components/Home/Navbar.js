@@ -67,6 +67,9 @@ const Navbar = ({ sidebarwidth, submitted, setSubmitted }) => {
             }}
             _hover={{ cursor: "pointer" }}
             _active={{ transform: "scale(1.05)" }}
+            onClick={() => {
+              history.go(-1);
+            }}
           >
             <AiOutlineLeft color="white" fontSize={30} />
           </Box>
@@ -81,6 +84,9 @@ const Navbar = ({ sidebarwidth, submitted, setSubmitted }) => {
             }}
             _hover={{ cursor: "pointer" }}
             _active={{ transform: "scale(1.05)" }}
+            onClick={() => {
+              history.go(1);
+            }}
           >
             <AiOutlineRight
               color="white"
@@ -143,7 +149,7 @@ const Navbar = ({ sidebarwidth, submitted, setSubmitted }) => {
                 }}
                 _hover={{
                   backgroundColor: "none",
-                  transform: "scale(1.03)",
+                  // transform: "scale(1.03)",
                 }}
               >
                 {currentUser ? currentUser.username : "Sign In"}

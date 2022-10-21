@@ -25,7 +25,7 @@ class User < ApplicationRecord
 
   before_validation :ensure_session_token
 
-  has_many :playlists
+  has_many :playlists, dependent: :destroy
 
   def self.find_by_credentials(credential, password)
 

@@ -22,6 +22,11 @@ ApplicationRecord.transaction do
       email: 'demo@user.io', 
       password: 'password'
     )
+    User.create!(
+      username: '2ndRecruiterDemo', 
+      email: '2demo@user.io', 
+      password: '2password'
+    )
 
     Playlist.create!(
       title: 'Muh Prayrist', 

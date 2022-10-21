@@ -1,14 +1,48 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Divider, Flex, Icon, Text } from "@chakra-ui/react";
 import SpotifyLogo from "../../SpotifyLogo";
 import { MdHomeFilled } from "react-icons/md";
 import { RiSearchLine, RiSearchFill } from "react-icons/ri";
 import { BiLibrary } from "react-icons/bi";
+import { BsPlusSquareFill } from "react-icons/bs";
 import { Link, useLocation } from "react-router-dom";
 import "./Sidebar.css";
+import { useEffect } from "react";
+import csrfFetch from "../../store/csrf";
+import { createPlaylistForOne, getPlaylistsForOne } from "../../store/playlist";
+import { useDispatch, useSelector } from "react-redux";
 
 const Sidebar = ({ sidebarwidth }) => {
   const location = useLocation();
+  const dispatch = useDispatch();
   // console.log(location.pathname);
+  const currentUser = useSelector((state) => state.session.user);
+  console.log(currentUser, "in sidebar user");
+  const playlists = useSelector((state) => state.playlist.list);
+  console.log(
+    playlists.sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt)),
+    " in sidebar playlists"
+  );
+  // const playlist
+
+  // useEffect(() => {
+  //   csrfFetch("/api/playlists", {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       playlist: {
+  //         user_id: 1,
+  //         title: "New thing",
+  //       },
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => console.log(data, "da data fetchhhy"));
+  // }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      dispatch(getPlaylistsForOne(currentUser.id));
+    }
+  }, [dispatch, currentUser]);
 
   return (
     <Box className="sidebar">
@@ -83,11 +117,11 @@ const Sidebar = ({ sidebarwidth }) => {
                   <div
                     style={{
                       position: "absolute",
-                      top: "151.2px",
-                      left: "29px",
+                      top: "151.35px",
+                      left: "29.54px",
                     }}
                   >
-                    <svg width="20px" height="20px">
+                    <svg width="21px" height="20px">
                       <path
                         fill="white"
                         d="M15.356 10.558c0 2.623-2.16 4.75-4.823 4.75-2.664 0-4.824-2.127-4.824-4.75s2.16-4.75 4.824-4.75c2.664 0 4.823 2.127 4.823 4.75z"
@@ -179,7 +213,96 @@ const Sidebar = ({ sidebarwidth }) => {
               </Text>
             </Box>
           </Box>
-          <Box></Box>
+
+          {/* <Box color="white">Create Playlist</Box> */}
+
+          <Box
+            className="addIconParent"
+            display="flex"
+            justifyContent="flex-start"
+            alignItems="center"
+            pl={6}
+            ml="2px"
+            mt="50px"
+            //   mb={3}
+            pb={4}
+            as={Link}
+            // ideally this would in line on click create a new playlist, then
+            // instantly route to that new page, update your dispatchs as well
+            // to="/" //UNCOMMENT LATER
+            onClick={() => {
+              dispatch(createPlaylistForOne(currentUser.id, "My Playlist"));
+            }}
+          >
+            <Icon
+              className="addIcon"
+              // _hover={{
+              //   color: "white",
+              // }}
+              fontSize={29}
+              as={BsPlusSquareFill}
+              color={"rgb(179, 179, 179)"}
+              sx={{ transition: "0.2s" }}
+            />
+            <Text
+              className="addIconText"
+              ml="13px"
+              fontFamily="Circular"
+              color={"rgb(179, 179, 179)"}
+              fontWeight={500}
+              // _hover={{
+              //   color: "white",
+              // }}
+              sx={{ transition: "0.2s" }}
+            >
+              Create Playlist
+            </Text>
+          </Box>
+          <Divider
+            width="78%"
+            // mt={10}
+            ml={5}
+            mr={3}
+            backgroundColor="rgb(36, 36, 36)"
+            opacity={0.2}
+          />
+          {/* actual playlists below */}
+          <Box
+            mt={2}
+            className="playlistsScroll"
+            sx={{
+              overflow: "auto",
+              // border: "1px solid white",
+              height: "1000px",
+
+              padding: "2px 20px",
+              // backgroundClip: "content-box", // just to visualize
+              // backgroundColor: "red",
+            }}
+          >
+            {playlists.reverse().map((e) => {
+              return (
+                <Box
+                  pl={1}
+                  sx={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap", // does the ... thingy if too long
+                    // letterSpacing: "-.5px",
+                  }}
+                  fontSize="15px"
+                  color="rgb(159, 159, 159)"
+                  pb="12px"
+                  _hover={{
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                >
+                  {e.title}
+                </Box>
+              );
+            })}
+          </Box>
         </Flex>
       </div>
     </Box>

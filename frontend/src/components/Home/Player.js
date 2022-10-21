@@ -23,6 +23,7 @@ import { setCurrentSong } from "../../store/player";
 import { FaStepBackward, FaStepForward } from "react-icons/fa";
 import { ImShuffle } from "react-icons/im";
 import { TbRepeat } from "react-icons/tb";
+import { AiOutlineSound } from "react-icons/ai";
 import MyTooltip from "./MyTooltip";
 
 const Player = ({ playerTarget, setPlayerTarget, loading, setLoading }) => {
@@ -31,6 +32,7 @@ const Player = ({ playerTarget, setPlayerTarget, loading, setLoading }) => {
   //   const [currentVideo, setCurrentVideo] = useState("DcDbKDAb7go");
   //   const [currentVideo, setCurrentVideo] = useState("bsgBUM2Mnsw");
   // changmo
+  const [volume, setVolume] = useState(100);
   const dispatch = useDispatch();
   const currentVideo = useSelector((state) => state.player.song);
 
@@ -102,6 +104,7 @@ const Player = ({ playerTarget, setPlayerTarget, loading, setLoading }) => {
         }
         console.log(playerTarget.getPlayerState(), "this is state info");
         setCurrentStatus(playerTarget.getPlayerState());
+        setVolume(playerTarget.getVolume());
 
         if (playerTarget.getPlayerState() === 0) {
           // when video ends set to 0
@@ -464,7 +467,62 @@ const Player = ({ playerTarget, setPlayerTarget, loading, setLoading }) => {
             )}
           </Box>
         </Box>
-        <Box className="volumeFlexPortion"></Box>
+        <Box className="volumeFlexPortion">
+          <AiOutlineSound
+            color="rgb(139, 139, 139)"
+            fontSize={19}
+            style={{ marginRight: "8px" }}
+          />
+          <Slider
+            aria-label="slider-ex-1"
+            //   value={(currentTime / maxTime) * 100}
+            value={volume}
+            min={0}
+            max={100}
+            focusThumbOnChange={false}
+            onChange={
+              (val) => {
+                //   playerTarget.mute();
+                //   delaySeek(e);
+                playerTarget.setVolume(val);
+                setVolume(val);
+                // playerTarget.unMute();
+              }
+              //   (val) => {
+              //   playerTarget.mute();
+              //   playerTarget.seekTo((val / 100) * maxTime);
+              //   playerTarget.unMute();
+              // }
+            }
+            step={1}
+            sx={{ width: "20%", marginRight: "20px" }}
+          >
+            <SliderTrack
+              boxSize="6px"
+              _hover={
+                {
+                  // boxSize: 2,
+                }
+              }
+            >
+              <SliderFilledTrack
+                sx={{
+                  backgroundColor: "rgb(72, 171, 83)",
+                }}
+                _active={{}}
+              />
+            </SliderTrack>
+            <SliderThumb
+              boxSize="10px"
+              _active={{
+                boxSize: "10px",
+              }}
+              _hover={{
+                boxSize: "10px",
+              }}
+            />
+          </Slider>
+        </Box>
         {/* player ends */}
       </div>
     </>
