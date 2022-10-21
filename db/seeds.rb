@@ -27,6 +27,10 @@ ApplicationRecord.transaction do
       title: 'Muh Prayrist', 
       user_id: 1
     )
+    Playlist.create!(
+      title: 'Anotha Listpray', 
+      user_id: 1
+    )
 
     Song.create!(
       playlist_id: 1,
@@ -44,9 +48,9 @@ ApplicationRecord.transaction do
       order: '3'
     )
     Song.create!(
-      playlist_id: 1,
+      playlist_id: 2,
       link: 'Np2IqqJ5otg',
-      order: '3'
+      order: '1'
     )
   
     # More users
