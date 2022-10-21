@@ -76,10 +76,10 @@ const LoginFormPage = () => {
       <div className="topcontainersignin">
         {/* {submitted && errors.map((err, i) => <div key={i}>{err}</div>)} */}
         {/* <Link to="/">Go back b</Link> */}
-        <SpotifyLogo size={155} />
+        <SpotifyLogo size={155} style={{ paddingBottom: "0px" }} />
         <Divider
           sx={{ position: "absolute", top: "93px" }}
-          mt="-10px"
+          mt="0px"
           mb="15px"
         />
         <Box

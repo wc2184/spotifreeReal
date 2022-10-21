@@ -49,7 +49,9 @@ const Search = ({ submitted, setSubmitted }) => {
   const searchNow = () => {
     console.log(searchTerm, "this is searchTerm");
     dispatch(searchYoutube(searchTerm)).then(() => {
-      setSubmitted(true);
+      setTimeout(() => {
+        // setSubmitted(true);
+      }, 200);
       window.scrollTo(0, 0);
     });
   };

@@ -9,6 +9,7 @@
   display: flex;
   border-top: 1px solid rgb(50, 50, 50);
   box-shadow: -10px -5px 24px rgb(0, 0, 0, 0.5);
+  z-index: 12;
 }
 .reactplayer {
   height: 0px;

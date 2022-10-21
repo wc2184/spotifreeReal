@@ -37,7 +37,11 @@ const Player = ({ playerTarget, setPlayerTarget, loading, setLoading }) => {
   //   console.log(currentVideo, "this is currVideo");
   const pressSpaceListener = (e) => {
     // e.preventDefault();
-    if (e.key == " " && e.target == document.body) {
+    console.log(e.target, "REAL TARGET");
+    if (
+      (e.key == " " && e.target == document.body) ||
+      e.target.nodeName == "A"
+    ) {
       e.preventDefault();
     }
     console.log(e.target.nodeName);
@@ -183,7 +187,7 @@ const Player = ({ playerTarget, setPlayerTarget, loading, setLoading }) => {
                     ""
                   )}
               </Text>
-              <Text fontWeight={300} fontSize="12px" color="white">
+              <Text fontWeight={300} fontSize="12px" color="rgb(179, 179, 179)">
                 {videoDetails &&
                   (videoDetails.channelTitle.includes("VEVO")
                     ? videoDetails.channelTitle
@@ -330,6 +334,7 @@ const Player = ({ playerTarget, setPlayerTarget, loading, setLoading }) => {
                       marginRight: "10px",
                       fontSize: "12px",
                       paddingTop: "1px",
+                      color: "rgb(179, 179, 179)",
                     }}
                   >
                     {new Date(currentTime * 1000)
@@ -382,6 +387,7 @@ const Player = ({ playerTarget, setPlayerTarget, loading, setLoading }) => {
                       marginLeft: "10px",
                       fontSize: "12px",
                       paddingTop: "1px",
+                      color: "rgb(179, 179, 179)",
                     }}
                     className="noselect"
                   >

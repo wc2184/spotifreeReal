@@ -55,8 +55,7 @@ const Home = () => {
           `https://noembed.com/embed?url=https://www.youtube.com/watch?v=${ele.id.videoId}`
         );
         let data = await res.json();
-
-        noembedArr.push(data);
+        if (!data.hasOwnProperty("error")) noembedArr.push(data);
       }
 
       // console.log(noembedArr, "THE GUCCI ARR");
@@ -160,7 +159,7 @@ const Home = () => {
                         // border: "1px solid white",
                         borderRadius: "8px",
                         padding: "20px",
-                        backgroundColor: "rgb(36, 36, 36)",
+                        backgroundColor: "rgb(32, 32, 32)",
                         // transition: "all .9 ease",
                         WebkitTransition: "background-color .3s ease", // transition doesn't work for some reason, this is borrowed from spotify
                         transition: "ease 0.3s",
@@ -452,6 +451,9 @@ const Home = () => {
                                 // }}
                               ></Box>
                               <Box
+                                sx={{
+                                  color: "rgb(179, 179, 179)",
+                                }}
                                 dangerouslySetInnerHTML={{
                                   __html:
                                     noembedDatas.length > 0 &&
@@ -628,6 +630,9 @@ const Home = () => {
                             // }}
                           ></Box>
                           <Box
+                            sx={{
+                              color: "rgb(179, 179, 179)",
+                            }}
                             dangerouslySetInnerHTML={{
                               __html:
                                 noembedDatas.length > 0 &&

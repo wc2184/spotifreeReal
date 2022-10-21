@@ -88,7 +88,7 @@ const SignupFormPage = () => {
         <SpotifyLogo size={155} />
         <Divider
           sx={{ position: "absolute", top: "93px" }}
-          mt="-10px"
+          mt="0px"
           mb="15px"
         />
 

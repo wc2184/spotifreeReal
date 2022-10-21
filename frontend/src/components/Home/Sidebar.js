@@ -4,6 +4,7 @@ import { MdHomeFilled } from "react-icons/md";
 import { RiSearchLine, RiSearchFill } from "react-icons/ri";
 import { BiLibrary } from "react-icons/bi";
 import { Link, useLocation } from "react-router-dom";
+import "./Sidebar.css";
 
 const Sidebar = ({ sidebarwidth }) => {
   const location = useLocation();
@@ -24,7 +25,7 @@ const Sidebar = ({ sidebarwidth }) => {
           <SpotifyLogo
             size={140}
             color="white"
-            style={{ marginLeft: "24px", marginTop: "5px" }}
+            style={{ marginLeft: "0px", marginTop: "0px" }}
           />
           <Box style={{ color: "whitesmoke" }}>
             <Box
