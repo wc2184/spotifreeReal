@@ -1,6 +1,6 @@
 # Spotifree
 
-[Spotifree](https://spotifreeaa22.herokuapp.com/)
+[Spotifree Live Link](https://spotifreeaa22.herokuapp.com/)
 
 ## Brief Overview
 
