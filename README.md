@@ -1,6 +1,6 @@
 # Spotifree
 
-[Spotifree](https://github.com/wc2184/spotifreereal.git)
+[Spotifree](https://spotifreeaa22.herokuapp.com/)
 
 ## Brief Overview
 
